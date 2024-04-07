@@ -45,11 +45,11 @@ app.post("/signup", async (req, res) => {
     console.log(existingUser);
 
     if (existingUser) {
-      res.send({ message: "Email id is already registered" });
+      res.send({ message: "Email id is already registered", alert: false });
     } else {
       const newUser = new userModel(req.body);
       await newUser.save();
-      res.send({ message: "Successfully registered" });
+      res.send({ message: "Successfully registered", alert: true });
     }
   } catch (err) {
     console.error(err);
