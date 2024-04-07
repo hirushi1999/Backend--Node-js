@@ -16,12 +16,44 @@ mongoose
   .then(() => console.log("Connect to Database"))
   .catch((err) => console.log(err));
 
+//schema
+const userSchema = mongoose.Schema({
+  firstName: String,
+  lastName: String,
+  email: {
+    type: String,
+    unique: true,
+  },
+  password: String,
+  confirmPassword: String,
+  image: String,
+});
+
+const userModel = mongoose.model("user", userSchema);
+
 //API
 app.get("/", (req, res) => {
   res.send("server is running");
 });
 
-app.post("/signup", (req, res) => {
+app.post("/signup", async (req, res) => {
   console.log(req.body);
+  const { email } = req.body;
+
+  try {
+    const existingUser = await userModel.findOne({ email: email }).exec();
+    console.log(existingUser);
+
+    if (existingUser) {
+      res.send({ message: "Email id is already registered" });
+    } else {
+      const newUser = new userModel(req.body);
+      await newUser.save();
+      res.send({ message: "Successfully registered" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
