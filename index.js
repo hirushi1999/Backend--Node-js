@@ -36,6 +36,7 @@ app.get("/", (req, res) => {
   res.send("server is running");
 });
 
+//Sign Up API
 app.post("/signup", async (req, res) => {
   console.log(req.body);
   const { email } = req.body;
@@ -56,4 +57,36 @@ app.post("/signup", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+//Login API
+app.post("/login", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const existingUser = await userModel.findOne({ email: email }).exec();
+
+    if (existingUser) {
+      const dataSend = {
+        _id: existingUser._id,
+        firstName: existingUser.firstName,
+        lastName: existingUser.lastName,
+        email: existingUser.email,
+        image: existingUser.image,
+      };
+      console.log(dataSend);
+      res.send({
+        message: "Login is successful.",
+        alert: true,
+        data: dataSend,
+      });
+    } else {
+      res.send({ message: "Email is not registered", alert: false });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//server is running
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
