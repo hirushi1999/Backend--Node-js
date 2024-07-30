@@ -7,8 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 8080;
-//MONGODB connection
+const PORT = process.env.PORT || 8090;
+// MONGODB connection
 console.log(process.env.MONGODB_URL);
 mongoose.set("strictQuery", false);
 mongoose
@@ -16,7 +16,7 @@ mongoose
   .then(() => console.log("Connect to Database"))
   .catch((err) => console.log(err));
 
-//schema
+// schema
 const userSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
   image: String,
 });
 
-const userModel = mongoose.model("user", userSchema);
+const userModel = mongoose.model("users", userSchema);
 
 //API
 app.get("/", (req, res) => {
