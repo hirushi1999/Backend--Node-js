@@ -111,3 +111,9 @@ app.post("/saveProduct", async (req, res) => {
   const datasave = await data.save();
   res.send({ message: "New Product added successfully" });
 });
+
+//
+app.get("/product", async (req, res) => {
+  const data = await productModel.find({});
+  res.send(JSON.stringify(data));
+});
