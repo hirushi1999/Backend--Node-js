@@ -2,11 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: '50mb' }));
 
 const PORT = process.env.PORT || 8090;
 // MONGODB connection
@@ -92,28 +92,71 @@ app.post("/login", async (req, res) => {
 //server is running
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
 
+
 //Product section
 const schemaProduct = mongoose.Schema({
-  name: String,
-  category: String,
-  image: String,
-  price: String,
-  description: String,
+    name : String,
+    category : String,
+    image : String,
+    price : String,
+    description : String,
 });
 
 const productModel = mongoose.model("products", schemaProduct);
 
 // save product API
-app.post("/saveProduct", async (req, res) => {
+app.post("/saveProduct", async(req, res) => {
   console.log(req.body);
 
-  const data = await productModel(req.body);
-  const datasave = await data.save();
-  res.send({ message: "New Product added successfully" });
+  const data = await productModel(req.body)
+  const datasave = await data.save()
+  res.send({message: "New Product added successfully"});
 });
 
 //
-app.get("/product", async (req, res) => {
+app.get("/product",async(req,res)=>{
   const data = await productModel.find({});
   res.send(JSON.stringify(data));
+})
+
+//Review section
+const schemaReview = mongoose.Schema({
+  name : String,
+  designation : String,
+  comment : String,
+  rating: Number,
+});
+
+const reviewModel = mongoose.model("reviews", schemaReview);
+
+// save review API
+app.post("/saveReview", async(req, res) => {
+console.log(req.body);
+
+const data = await reviewModel(req.body)
+const datasave = await data.save()
+res.send({message: "Your comment added successfully"});
+});
+
+//
+app.get("/review",async(req,res)=>{
+  const data = await reviewModel.find({});
+  res.send(JSON.stringify(data));
+})
+
+//subscribe email
+//subscribe email section
+const schemaSubscribe = mongoose.Schema({
+  email : String,
+});
+
+const subscribeModel = mongoose.model("cusEmails", schemaSubscribe);
+
+// save product API
+app.post("/subscribeEmail", async(req, res) => {
+console.log(req.body);
+
+const data = await subscribeModel(req.body)
+const datasave = await data.save()
+res.send({message: "Email added successfully"});
 });
