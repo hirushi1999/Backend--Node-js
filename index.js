@@ -39,12 +39,10 @@ app.get("/", (req, res) => {
 
 //Sign Up API
 app.post("/signup", async (req, res) => {
-  console.log(req.body);
   const { email } = req.body;
 
   try {
     const existingUser = await userModel.findOne({ email: email }).exec();
-    console.log(existingUser);
 
     if (existingUser) {
       res.send({ message: "Email id is already registered", alert: false });
@@ -74,7 +72,7 @@ app.post("/login", async (req, res) => {
         email: existingUser.email,
         image: existingUser.image,
       };
-      console.log(dataSend);
+      
       res.send({
         message: "Login is successful.",
         alert: true,
@@ -106,7 +104,6 @@ const productModel = mongoose.model("products", schemaProduct);
 
 // save product API
 app.post("/saveProduct", async(req, res) => {
-  console.log(req.body);
 
   const data = await productModel(req.body)
   const datasave = await data.save()
@@ -131,7 +128,6 @@ const reviewModel = mongoose.model("reviews", schemaReview);
 
 // save review API
 app.post("/saveReview", async(req, res) => {
-console.log(req.body);
 
 const data = await reviewModel(req.body)
 const datasave = await data.save()
@@ -154,7 +150,6 @@ const subscribeModel = mongoose.model("cusEmails", schemaSubscribe);
 
 // save product API
 app.post("/subscribeEmail", async(req, res) => {
-console.log(req.body);
 
 const data = await subscribeModel(req.body)
 const datasave = await data.save()
